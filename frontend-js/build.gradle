@@ -1,0 +1,115 @@
+apply plugin: "com.moowork.node"
+apply plugin: 'kotlin2js'
+apply plugin: 'kotlin-dce-js'
+
+dependencies {
+    compile libraries.kotlin_stdlib_js
+    compile libraries.kotlinx_html_js
+    compile libraries.kotlin_react
+    compile libraries.kotlin_react_dom
+    compile libraries.kotlin_serialization_js
+    compile libraries.kotlin_coroutines_js
+    compile project(':common-js')
+    compile libraries.kotlin_test_js
+}
+
+repositories {
+    maven { url "https://kotlin.bintray.com/kotlinx" }
+    maven { url "https://kotlin.bintray.com/kotlin-js-wrappers" }
+}
+
+compileKotlin2Js {
+    kotlinOptions.metaInfo = true
+    kotlinOptions.sourceMap = true
+    kotlinOptions.sourceMapEmbedSources = "always"
+    kotlinOptions.suppressWarnings = true
+    kotlinOptions.verbose = true
+    kotlinOptions.main = "call"
+    kotlinOptions.moduleKind = "umd"
+}
+
+compileTestKotlin2Js {
+    kotlinOptions.metaInfo = true
+    kotlinOptions.sourceMap = true
+    kotlinOptions.sourceMapEmbedSources = "always"
+    kotlinOptions.moduleKind = 'umd'
+    kotlinOptions.main = "call"
+}
+
+def outputDir = "${projectDir}/node_modules"
+def trimmedJsDir = "${buildDir}/kotlin-js-min"
+def webDir = "${projectDir}/src/main/web"
+def bundleFilename = "atlas.min.js"
+
+task populateNodeModules(type: Copy, dependsOn: [compileKotlin2Js, compileTestKotlin2Js, runDceKotlinJs]) {
+    from "${trimmedJsDir}/main"
+    include "*"
+    into "${outputDir}"
+}
+
+task webpack(type: Exec) {
+    outputs.dir(webDir)
+
+    commandLine "$projectDir/node_modules/.bin/webpack",
+            "--mode", "development",
+            "--entry", "${outputDir}/frontend-js.js",
+            "--output", "${webDir}/${bundleFilename}"
+}
+
+task installQunit(type: NpmTask) {
+    inputs.property('qunitVersion', qunitVersion)
+    outputs.dir file('node_modules/qunit')
+
+    args = ['install', "qunit@${qunitVersion}"]
+}
+
+task runQunit(type: NodeTask, dependsOn: [compileTestKotlin2Js, installQunit]) {
+    script = file('node_modules/qunit/bin/qunit')
+    args = [projectDir.toPath().relativize(file(compileTestKotlin2Js.outputFile).toPath())]
+}
+
+task copyTestSrcs(type: Copy, dependsOn: compileTestKotlin2Js) {
+    from compileKotlin2Js.destinationDir
+    configurations.testCompile.each {
+        from zipTree(it.absolutePath).matching { include '*.js' }
+    }
+    into "${outputDir}"
+}
+
+task cleanNodeModules(type: Delete) {
+    delete fileTree("${outputDir}") {
+        include "*.js"
+        include "*.js.map"
+    }
+}
+
+task cleanWebDir(type: Delete) {
+    delete fileTree("${webDir}") {
+        include "**/*.js"
+    }
+}
+
+task prepareJsSources(type: GradleBuild) {
+    tasks = [
+        "cleanWebDir",
+        "cleanNodeModules",
+        "npmInstall",
+        "populateNodeModules",
+        "webpack",
+        "cleanNodeModules",
+    ]
+}
+
+task testJs(type: GradleBuild) {
+    tasks = [
+        "copyTestSrcs",
+        "runQunit",
+        "cleanNodeModules",
+    ]
+}
+
+clean.dependsOn cleanWebDir
+
+assemble.dependsOn prepareJsSources
+
+test.finalizedBy testJs
