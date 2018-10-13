@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="styles/default.css">
+    <link rel="stylesheet" type="text/css" href="styles/simple-sidebar.css">
+    <link rel="stylesheet" type="text/css" href="styles/typeahead.css">
+
+    <!-- Bootstrap CDN dependencies -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1ht2rYEG1WRx0s-iaL5NmO2p99BWaHWs"></script>
+    <script type="text/javascript" language="JavaScript" src="atlas.min.js"></script>
+</head>
+
+<body>
+
+<div id="wrapper" class="toggled">
+    <div class="fixed-top">
+        <!-- Nav bar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="ml-5" >
+                <a class="navbar-brand" href="#">
+                    <img src="images/globe-white.svg" width="50" height="50" alt="Atlas">
+                </a>
+            </div>
+
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item active">
+                    <h2 class="nav-link" href="#">ATLAS</h2>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper" style="margin-top: 78px">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="#">
+                    Start Bootstrap
+                </a>
+            </li>
+            <li>
+                <a href="#">Dashboard</a>
+            </li>
+            <li>
+                <a href="#">Shortcuts</a>
+            </li>
+            <li>
+                <a href="#">Overview</a>
+            </li>
+            <li>
+                <a href="#">Events</a>
+            </li>
+            <li>
+                <a href="#">About</a>
+            </li>
+            <li>
+                <a href="#">Services</a>
+            </li>
+            <li>
+                <a href="#">Contact</a>
+            </li>
+        </ul>
+    </div>
+    <div id="whitespace" style="height: 78px"></div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div class="container-fluid m-2">
+        <!-- Page Content -->
+        <div id="page-content-wrapper-words">
+            <div class="container-fluid">
+                <h1>Simple Sidebar</h1>
+                <p>
+                    Welcome to Atlas, a tool designed to help you select the
+                    ideal place to live to minimise your commute to work or school.
+                </p>
+                <p>Type the name or address of your daily commute destination to get started!</p>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+
+    <div id="the-basics">
+        <input id="flatmates-typeahead" class="typeahead" type="text" placeholder="States of USA">
+    </div>
+
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <h1>Simple Sidebar</h1>
+            <p>This template has a responsive menu toggling system. The menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will appear/disappear. On small screens, the page content will be pushed off canvas.</p>
+            <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>.</p>
+            <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Toggle Menu</a>
+        </div>
+    </div>
+
+    <input id="basics"/>
+
+    <!-- /#page-content-wrapper -->
+
+    <!--<div id="page-content-wrapper-maps">-->
+        <!--<div id="map" class="mx-auto my-4" style="width:95%;height:500px;"></div>-->
+    <!--</div>-->
+
+    <div class="container-fluid">
+        <div id="root"></div>
+    </div>
+
+</div>
+<!-- /#wrapper -->
+
+<!-- Menu Toggle Script -->
+<script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+
+<!-- JS file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/easy-autocomplete/1.3.5/jquery.easy-autocomplete.min.js"></script>
+
+<!-- CSS file -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/easy-autocomplete/1.3.5/easy-autocomplete.min.css">
+
+<!-- Additional CSS Themes file - not required-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/easy-autocomplete/1.3.5/easy-autocomplete.themes.min.css">
+
+<script>
+
+    // var options = {
+    //
+    //     // https://jsonplaceholder.typicode.com/todos/1
+    //
+    //     url: "resources/people.json",
+    //
+    //     getValue: "name",
+    //
+    //     list: {
+    //         match: {
+    //             enabled: true
+    //         }
+    //     },
+    //
+    //     theme: "plate-dark"
+    // };
+
+    var options = {
+        url: function(phrase) {
+            if (phrase !== "") {
+                return "http://api.duckduckgo.com/?q=" + phrase + "&format=json";
+            } else {
+                //duckduckgo doesn't support empty strings
+                return "http://api.duckduckgo.com/?q=empty&format=json";
+            }
+        },
+
+        getValue: "Text",
+
+        ajaxSettings: {
+            dataType: "jsonp"
+        },
+
+        listLocation: "RelatedTopics",
+
+        requestDelay: 300,
+
+        theme: "round"
+    };
+
+    $("#basics").easyAutocomplete(options);
+
+
+    // var options = {
+    //
+    //     url: function(phrase) {
+    //         console.log("the url was built");
+    //         return window.location.origin + "/autocompleteHandler"
+    //     },
+    //
+    //         getValue: function(element) {
+    //         return element.search_title;
+    //     },
+    //
+    //     ajaxSettings: {
+    //         dataType: "json",
+    //         method: "POST",
+    //         data: {
+    //             dataType: "json"
+    //         },
+    //         error: function (xhr, status, errorThrown) {
+    //             //Here the status code can be retrieved like;
+    //             console.log(xhr.status);
+    //
+    //             //The message added to Response object in Controller can be retrieved as following.
+    //             console.log(xhr.responseText);
+    //         }
+    //     },
+    //
+    //     preparePostData: function(data) {
+    //         //data.phrase = ;
+    //         return {userInput: $("#basics").val()};
+    //     },
+    //
+    //     requestDelay: 400
+    //
+    //    //data: ["blue", "green", "pink", "red", "yellow"]
+    //};
+
+    $("#basics").easyAutocomplete(options);
+
+    // var options = {
+    //
+    //     url: function(phrase) {
+    //         return "api/countrySearch.php";
+    //     },
+    //
+    //     getValue: function(element) {
+    //         return element.name;
+    //     },
+    //
+    //     ajaxSettings: {
+    //         dataType: "json",
+    //         method: "POST",
+    //         data: {
+    //             dataType: "json"
+    //         }
+    //     },
+    //
+    //     preparePostData: function(data) {
+    //         data.phrase = $("#example-ajax-post").val();
+    //         return data;
+    //     },
+    //
+    //     requestDelay: 400
+    // };
+    //
+    // $("#example-ajax-post").easyAutocomplete(options);
+</script>
+
+
+
+<script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
+
+<!--<script>-->
+    <!--$('#the-basics').typeahead({-->
+<!--//        input: 'flatmates-typeahead',-->
+        <!--minLength: 1,-->
+        <!--order: "asc",-->
+        <!--offset: true,-->
+        <!--hint: true,-->
+        <!--source: {-->
+            <!--car: {-->
+                <!--data: ["My first added brand", "M1 added brand at start"],-->
+                <!--ajax: {-->
+                    <!--type: "POST",-->
+                    <!--url: "/jquerytypeahead/car_v1.json",-->
+                    <!--data: {-->
+                        <!--myKey: "myValue"-->
+                    <!--}-->
+                <!--}-->
+            <!--}-->
+        <!--},-->
+        <!--callback: {-->
+            <!--onClick: function (node, a, item, event) {-->
+
+                <!--console.log(node)-->
+                <!--console.log(a)-->
+                <!--console.log(item)-->
+                <!--console.log(event)-->
+
+                <!--console.log('onClick function triggered');-->
+
+            <!--},-->
+            <!--onSubmit: function (node, form, item, event) {-->
+
+                <!--console.log(node)-->
+                <!--console.log(form)-->
+                <!--console.log(item)-->
+                <!--console.log(event)-->
+
+                <!--console.log('onSubmit override function triggered');-->
+
+            <!--}-->
+        <!--}-->
+    <!--});-->
+
+<!--</script>-->
+
+
+<script>
+    var substringMatcher = function(strs) {
+        return function findMatches(q, cb) {
+            var matches, substringRegex;
+
+            // an array that will be populated with substring matches
+            matches = [];
+
+            // regex used to determine if a string contains the substring `q`
+            substrRegex = new RegExp(q, 'i');
+
+            // iterate through the pool of strings and for any string that
+            // contains the substring `q`, add it to the `matches` array
+            $.each(strs, function(i, str) {
+                if (substrRegex.test(str)) {
+                    matches.push(str);
+                }
+            });
+
+            cb(matches);
+        };
+    };
+
+    //var flatmates = function()
+
+    var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+        'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
+        'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+        'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+        'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+        'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+        'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+        'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+        'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+    ];
+
+    $('#the-basics .typeahead').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'states',
+            source: substringMatcher(states)
+        });
+</script>
+
+<!-- Google maps callback script -->
+<!--<script>-->
+    <!--var map;-->
+    <!--function initMap() {-->
+        <!--map = new google.maps.Map(document.getElementById('map'), {-->
+            <!--center: {lat: -34.397, lng: 150.644},-->
+            <!--zoom: 8-->
+        <!--});-->
+    <!--}-->
+<!--</script>-->
+
+</body>
+
+</html>

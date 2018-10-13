@@ -1,7 +1,7 @@
 package com.wadejensen.retirement.employment
 
 import com.wadejensen.retirement.tax.compsulsorySuperRate
-import com.wadejensen.retirement.tax.medicareLevy
+import kotlin.math.min
 
 //class EmploymentIncome {
 //    fun salary()
@@ -20,23 +20,8 @@ fun salaryExcludingSuper(financialYear: Int, salaryIncludesSuper: Boolean, salar
     else
         salary
 
+fun payRise(salary: Double, payRiseRate: Double): Double =
+    salary * payRiseRate
 
 
 fun taxDeductions(): Double = 0.0
-
-
-//val salaryExludingSuper = salaryExcludingSuper(financialYear, salaryIncludesSuper, salary)
-//val taxDeductions       = taxDeductions()
-//
-//fun interest(): Double = 0.0
-//fun investmentInterest(investmentReturnRate: Double, investmentPrinciple: Double) =
-//    investmentReturnRate * investmentPrinciple
-//
-//fun capitalGains(): Double = 0.0
-//
-//val taxableIncome = salaryExludingSuper - taxDeductions
-//
-//val incomeTax    = incomeTax(taxableIncome)
-//val medicareLevy = medicareLevy(taxableIncome, hasPrivateHeathInsurance)
-//
-//val takeHomePay = taxableIncome - incomeTax - medicareLevy

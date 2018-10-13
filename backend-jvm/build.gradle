@@ -3,6 +3,7 @@ apply plugin: 'kotlin-platform-jvm'
 dependencies {
     expectedBy project(':common')
     compile libraries.kotlin_stdlib
+    compile "io.github.config4k:config4k:0.4.0"
     testCompile libraries.kotlin_test_junit
 }
 

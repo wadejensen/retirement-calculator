@@ -1,38 +1,65 @@
 package com.wadejensen.retirement.tax
 
-fun taxableIncome(salary: Double, deductions: Double, capitalGains: Double): Double {
-    return TODO()
-}
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.round
+
+fun taxableIncome(salary: Double, deductions: Double, capitalGains: Double): Double =
+    salary - deductions + capitalGains
 
 /**
  * @param income Taxable income
  * @return Amount of income tax owed
  */
-fun incomeTax(income: Double): Double =
-    when {
+fun incomeTax(income: Double): Double {
+    val incomeTax = when {
         income <= 18_200.0 -> 0.0
-        income > 18_200.0 && income <=  37_000.0 ->            0.19  * (income - 18_200.0)
-        income > 37_000.0 && income <=  90_001.0 -> 3_572.0  + 0.325 * (income - 37_000.0)
-        income > 90_000.0 && income <= 180_000.0 -> 20_797.0 + 0.37  * (income - 90_000.0)
+        income > 18_200.0 && income <= 37_000.0 -> 0.19 * (income - 18_200.0)
+        income > 37_000.0 && income <= 90_000.0 -> 3_572.0 + 0.325 * (income - 37_000.0)
+        income > 90_001.0 && income <= 180_000.0 -> 20_797.0 + 0.37 * (income - 90_000.0)
         else -> 54_097.0 + 0.45 * (income - 180_000)
     }
 
-/**
- * @param income Income before tax (must be greater than zero)
- * @param hasPrivateHealthInsurance
- * @return Amount of tax owed due to medicare levy
- */
-fun medicareLevy(income: Double, hasPrivateHealthInsurance: Boolean): Double {
-    val taxRate = when {
-        income <= 0.0      -> 0.0
-        hasPrivateHealthInsurance -> 0.02
-        income <= 90_000.0 -> 0.02
-        income >  90_000.0 && income <= 105_000.0 -> 0.03
-        income > 105_000.0 && income <= 140_000.0 -> 0.0325
-        else -> 0.035
-    }
-    return income * taxRate
+    return round(incomeTax)
 }
+
+fun incomeTaxOffsets(income: Double, incomeTax: Double): Double {
+    val lowIncomeOffset = lowIncomeTaxOffset(income)
+    val lowAndMiddleIncomeOffset = lowAndMiddleIncomeTaxOffset(income)
+
+    // round to nearest cent
+    val possibleTaxOffsets = round((lowAndMiddleIncomeOffset + lowIncomeOffset) * 100.0) / 100.0
+
+    // avoid a tax offset causing a tax refund
+    return min(incomeTax, possibleTaxOffsets)
+}
+
+internal fun lowIncomeTaxOffset(income: Double): Double =
+    if (income <= 37_000) {
+        445.0
+    }
+    else {
+        val taxOffsetReduction = 0.015 * (income - 37_000)
+        max(0.0, 445.0 - taxOffsetReduction)
+    }
+
+
+internal fun lowAndMiddleIncomeTaxOffset(income: Double): Double =
+    if (income <= 37_000) {
+        200.0
+    }
+    else if (income > 37_000 && income <= 48_000) {
+        200 + 0.03 * (income - 37_000.0)
+    }
+    else if (income > 48_000.0 && income <= 90_000.0) {
+        530.0
+    }
+    else {
+        val offsetReduction = 0.015 * (income - 90_000.0)
+        max(0.0, 530.0 - offsetReduction)
+    }
+
+
 
 //fun capitalGainsTax()
 

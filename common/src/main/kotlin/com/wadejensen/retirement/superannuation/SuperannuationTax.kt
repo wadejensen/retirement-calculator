@@ -8,7 +8,9 @@ fun concessionalSuperContributionTax(
     compulsoryConcessionalContribution: Double,
     nonCompulsoryConcessionalContribution: Double): Double {
 
-    return TODO()
+    println("concessionalSuperContributionTax not implemented")
+
+    return 0.0
 }
 
 
