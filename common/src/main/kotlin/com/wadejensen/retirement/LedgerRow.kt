@@ -11,11 +11,12 @@ data class LedgerRow(
     val compulsorySuperContribution:    Double,
     val concessionalSuperTax: Double,
     val netCompulsorySuperContribution: Double,
-    val netSuperAnnuation: Double,
+    val netSuperContribution: Double,
     val investmentPrinciple: Double,
     val investmentGains: Double,
     val superPrinciple: Double,
-    val superGains: Double)
+    val superGains: Double
+)
 
 // has retired
 // capital gains tax??

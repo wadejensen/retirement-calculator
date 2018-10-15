@@ -15,8 +15,8 @@ fun medicareLevy(income: Double): Double  =
 fun medicareLevySurcharge(income: Double, hasPrivateHealthInsurance: Boolean): Double {
     val surchargeRate = when {
         hasPrivateHealthInsurance || income <=  90_000.0 -> 0.0
-        income >  90_000.0        && income <= 105_000.0 -> 0.03
-        income > 105_000.0        && income <= 140_000.0 -> 0.0325
+        income >  90_000.0        && income <= 105_000.0 -> 0.01
+        income > 105_000.0        && income <= 140_000.0 -> 0.0125
         else -> 0.035
     }
     return surchargeRate * income

@@ -1,11 +1,10 @@
 package com.wadejensen.retirement
 
-import com.wadejensen.retirement.employment.payRise
+import com.wadejensen.retirement.employment.raiseSalary
 import com.wadejensen.retirement.investment.investmentGains
 import com.wadejensen.retirement.superannuation.concessionalSuperContributionTax
 import com.wadejensen.retirement.superannuation.superReturns
 import com.wadejensen.retirement.tax.*
-import kotlin.math.min
 
 data class YearAndSalary(val financialYear: Int, val salary: Double)
 
@@ -13,17 +12,16 @@ data class YearAndSalary(val financialYear: Int, val salary: Double)
 //    )
 
 // TODO insert parameters from caller
-class RetirementCalculator() {
-    val financialYear = 2018
-    val salary = 100_000.0
-    val age = 23
+class RetirementCalculator(
+    val age: Int = 23,
+    val RETIREMENT_YEAR: Int = 2060,
+    val PAY_RISE_RATE: Double = 0.05,
+    val MAX_PAY: Double = 150_000.0,
+    val STOCK_MARKET_RETURN_RATE: Double = 0.075,
+    val INFLATION: Double = 0.03,
+    val SUPERANNUATION_RETURN_RATE: Double = 0.05,
+    val HAS_PRIVATE_HEALTH_INSURANCE: Boolean = false) {
 
-    val RETIREMENT_YEAR = 2060
-    val PAY_RISE_RATE = 0.05
-    val STOCK_MARKET_RETURN_RATE = 0.075
-    val INFLATION = 0.03
-    val SUPERANNUATION_RETURN_RATE = 0.05
-    val HAS_PRIVATE_HEALTH_INSURANCE = false
 
 // Do pre-processing on user data. Get the salary without super etc
 
@@ -38,81 +36,84 @@ class RetirementCalculator() {
         inflation: Double,
         maxPay: Double): Array<LedgerRow> {
 
-        val years = (initialFinancialYear + 1 .. retirementYear)
-        val emptyLedger = arrayOf(
-            LedgerRow(
-                financialYear = initialFinancialYear,
-                salary = initialSalary,
-                taxableIncome = 0.0,
-                incomeTax = 0.0,
-                medicare = 0.0,
-                takeHomePay = 0.0,
-                compulsorySuperContribution = 0.0,
-                concessionalSuperTax = 0.0,
-                netCompulsorySuperContribution = 0.0,
-                netSuperAnnuation = 0.0,
+        val year1Ledger: LedgerRow =
+            calculateNextLedgerRow(
+                initialFinancialYear,
+                initialSalary,
                 investmentPrinciple = 0.0,
-                investmentGains = 0.0,
                 superPrinciple = 0.0,
-                superGains = 0.0
-            ))
+                hasPrivateHealthInsurance = hasPrivateHealthInsurance)
 
-        val ledger = years.fold(emptyLedger) { ledger, _ -> ledger + calculateNextLedgerRow(ledger.last(), maxPay = maxPay) }
+        val ledger = (initialFinancialYear + 1 .. retirementYear)
+            .fold(arrayOf(year1Ledger)) { ledger, _ ->
+                ledger + calculateNextLedgerRow(ledger, hasPrivateHealthInsurance)
+            }
 
         // needs to simulate draw down from retirementYear until finalFinancialYear
         ledger.forEach { row -> println(row) }
         return ledger
     }
 
-    //fun superContribution(principle: Double, )
+    private fun calculateNextLedgerRow(
+        ledger: Array<LedgerRow>,
+        hasPrivateHealthInsurance: Boolean): LedgerRow
+    {
+        return calculateNextLedgerRow(
+            financialYear             = ledger.last().financialYear + 1,
+            salary                    = raiseSalary(ledger.last().salary, PAY_RISE_RATE, MAX_PAY),
+            investmentPrinciple       = ledger.last().investmentPrinciple,
+            superPrinciple            = ledger.last().superPrinciple,
+            hasPrivateHealthInsurance = hasPrivateHealthInsurance)
+    }
 
-    fun calculateNextLedgerRow(
-        previous: LedgerRow,
-        payRiseRate: Double = PAY_RISE_RATE,
-        inflation: Double   = INFLATION,
-        stockMarketReturnRate: Double  = STOCK_MARKET_RETURN_RATE,
-        hasPrivateHealthInsurance: Boolean = HAS_PRIVATE_HEALTH_INSURANCE,
-        maxPay: Double): LedgerRow {
 
-        val salary = min(previous.salary + payRise(previous.salary, payRiseRate), maxPay)
-        val compulsorySuperContribution = compulsorySuperContribution(salary, previous.financialYear)
 
+    private fun calculateNextLedgerRow(
+        financialYear: Int,
+        salary: Double,
+        superPrinciple: Double,
+        investmentPrinciple: Double,
+        hasPrivateHealthInsurance: Boolean): LedgerRow
+    {
+
+        // SUPER
+        val compulsorySuperContribution = compulsorySuperContribution(salary, financialYear)
         val additionalConcessionalSuperContribution: Double = 0.0 // TODO()
         val nonConcessionalSuperContribution: Double = 0.0 // TODO()
+        val nonConcessionalSuperContributionTax: Double = 0.0 // TODO()
 
-        val superGains = previous.superPrinciple + superReturns(previous.superPrinciple, SUPERANNUATION_RETURN_RATE)
+        val superGains = superPrinciple + superReturns(superPrinciple, SUPERANNUATION_RETURN_RATE)
 
         val concessionalSuperTax = concessionalSuperContributionTax(
-            previous.superPrinciple,
+            superPrinciple,
             compulsorySuperContribution,
             additionalConcessionalSuperContribution)
 
         val netConcessionalSuperContribution: Double = compulsorySuperContribution +
-            additionalConcessionalSuperContribution - concessionalSuperTax
+            additionalConcessionalSuperContribution -
+                concessionalSuperTax
+
+        val netSuperContribution = netConcessionalSuperContribution +
+            nonConcessionalSuperContribution -
+                nonConcessionalSuperContributionTax
 
         val totalSuperContribution = netConcessionalSuperContribution + nonConcessionalSuperContribution
 
-        val superPrinciple = previous.superPrinciple + totalSuperContribution + superGains
+        val investmentGains = investmentGains(investmentPrinciple, STOCK_MARKET_RETURN_RATE)
 
-
-        val investmentGains = investmentGains(previous.investmentPrinciple, STOCK_MARKET_RETURN_RATE)
-        val investmentPrincple = previous.investmentPrinciple + investmentGains
-
+        // TAXATION
         val taxDeductions: Double = additionalConcessionalSuperContribution // + TODO()
-
         val deductions: Double = additionalConcessionalSuperContribution // + TODO()
-
         val capitalGains = 0.0
-
         val taxableIncome = taxableIncome(salary, deductions, capitalGains)
-
         val incomeTax = incomeTax(taxableIncome) // TODO get CGT out of it
-        val takeHomePay = taxableIncome - incomeTax
-
+        val incomeTaxOffsets = incomeTaxOffsets(taxableIncome, incomeTax)
         val medicare = medicare(taxableIncome, hasPrivateHealthInsurance)
 
+        val takeHomePay = taxableIncome + incomeTaxOffsets - incomeTax - medicare
+
         return LedgerRow(
-            financialYear = previous.financialYear + 1,
+            financialYear = financialYear + 1,
             salary = salary,
             taxableIncome = taxableIncome,
             incomeTax = incomeTax,
@@ -122,11 +123,15 @@ class RetirementCalculator() {
             concessionalSuperTax = concessionalSuperTax,
             // TODO concessional super contribution tax
             netCompulsorySuperContribution = netConcessionalSuperContribution,
-            netSuperAnnuation = totalSuperContribution,
-            investmentPrinciple = investmentPrincple,
+            netSuperContribution = totalSuperContribution,
+            superGains = superGains,
+            superPrinciple = superPrinciple +
+                netSuperContribution +
+                    superGains,
             investmentGains = investmentGains,
-            superPrinciple = superPrinciple,
-            superGains = superGains
+            investmentPrinciple = investmentPrinciple
+                + investmentGains
+            //  + disposableIncome
         )
     }
 }

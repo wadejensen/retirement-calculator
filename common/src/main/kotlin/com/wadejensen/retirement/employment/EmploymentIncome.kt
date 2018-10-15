@@ -23,5 +23,9 @@ fun salaryExcludingSuper(financialYear: Int, salaryIncludesSuper: Boolean, salar
 fun payRise(salary: Double, payRiseRate: Double): Double =
     salary * payRiseRate
 
+fun raiseSalary(salary: Double, payRiseRate: Double, maxPay: Double) =
+    min(salary + payRise(salary, payRiseRate), maxPay)
+
+
 
 fun taxDeductions(): Double = 0.0
