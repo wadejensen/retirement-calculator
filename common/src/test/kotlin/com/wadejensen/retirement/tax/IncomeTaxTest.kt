@@ -5,28 +5,28 @@ import kotlin.test.assertEquals
 
 class IncomeTaxTest {
     @Test
-    fun negative_income()
+    fun negativeIncome()
     {
         val taxableIncome = -10_000.0
         assertEquals(expected = 0.0, actual = IncomeTax.incomeTax(taxableIncome))
     }
 
     @Test
-    fun zero_income()
+    fun zeroIncome()
     {
         val taxableIncome = 0.0
         assertEquals(expected = 0.0, actual = IncomeTax.incomeTax(taxableIncome))
     }
 
     @Test
-    fun within_tax_free_threshold()
+    fun withinTaxFreeThreshold()
     {
         val taxableIncome = 10_000.0
         assertEquals(expected = 0.0, actual = IncomeTax.incomeTax(taxableIncome))
     }
 
     @Test
-    fun limit_of_tax_free_threshold()
+    fun limitOfTaxFreeThreshold()
     {
         val taxableIncome = 18_200.0
         assertEquals(expected = 0.0, actual = IncomeTax.incomeTax(taxableIncome))
@@ -34,64 +34,63 @@ class IncomeTaxTest {
 
 
     @Test
-    fun within_low_income_bracket()
+    fun withinLowIncomeBracket()
     {
         val taxableIncome = 30_000.0
         assertEquals(expected = 2_242.0, actual = IncomeTax.incomeTax(taxableIncome))
     }
 
     @Test
-    fun limit_of_low_income_bracket()
+    fun limitOfLowIncomeBracket()
     {
         val taxableIncome = 37_000.0
         assertEquals(expected = 3_572.0, actual = IncomeTax.incomeTax(taxableIncome))
     }
 
     @Test
-    fun just_above_low_income_bracket()
+    fun justAboveLowIncomeBracket()
     {
         val taxableIncome = 37_011.0
         assertEquals(expected = 3_576.0, actual = IncomeTax.incomeTax(taxableIncome))
     }
 
     @Test
-    fun within_middle_income_bracket()
+    fun withinMiddleIncomeBracket()
     {
         val taxableIncome = 60_000.0
         assertEquals(expected = 11_047.0, actual = IncomeTax.incomeTax(taxableIncome))
     }
 
     @Test
-    fun limit_of_middle_income_bracket()
+    fun limitOfMiddleIncomeBracket()
     {
         val taxableIncome = 90_000.0
         assertEquals(expected = 20_797.0, actual = IncomeTax.incomeTax(taxableIncome))
     }
 
     @Test
-    fun just_above_middle_income_bracket()
+    fun justAboveMiddleIncomeBracket()
     {
         val taxableIncome = 90_100.0
         assertEquals(expected = 20_834.0, actual = IncomeTax.incomeTax(taxableIncome))
     }
 
     @Test
-    fun within_high_income_bracket()
+    fun withinHighIncomeBracket()
     {
         val taxableIncome = 150_000.0
-        val financialYear = 2018
         assertEquals(expected = 42_997.0, actual = IncomeTax.incomeTax(taxableIncome))
     }
 
     @Test
-    fun limit_of_high_income_bracket()
+    fun limitOfHighIncomeBracket()
     {
         val taxableIncome = 180_000.0
         assertEquals(expected = 54_097.0, actual = IncomeTax.incomeTax(taxableIncome))
     }
 
     @Test
-    fun just_above_high_income_bracket()
+    fun justAboveHighIncomeBracket()
     {
         val taxableIncome = 180_100.0
         assertEquals(expected = 54_142.0, actual = IncomeTax.incomeTax(taxableIncome))
@@ -100,14 +99,14 @@ class IncomeTaxTest {
     // TODO need to take any crazy rich people taxes into account
 
     @Test
-    fun within_uber_high_income_bracket()
+    fun withinUberHighIncomeBracket()
     {
         val taxableIncome = 250_000.0
         assertEquals(expected = 85_597.0, actual = IncomeTax.incomeTax(taxableIncome))
     }
 
     @Test
-    fun salary_at_one_million_dollars_just_to_make_a_point()
+    fun salaryAtOneMillionDollarsJustToMakeAPoint()
     {
         val taxableIncome = 1_000_000.0
         assertEquals(expected = 423_097.0, actual = IncomeTax.incomeTax(taxableIncome))
@@ -116,7 +115,7 @@ class IncomeTaxTest {
 
 class IncomeTaxOffsetTest {
     @Test
-    fun low_income_earner_with_tax_fully_offset()
+    fun lowIncomeEarnerWithTaxFullyOffset()
     {
         val taxableIncome = 19_000.0
         val incomeTax = 152.0
@@ -124,7 +123,7 @@ class IncomeTaxOffsetTest {
     }
 
     @Test
-    fun low_income_earner_with_tax_fully_offset_and_near_the_cap()
+    fun lowIncomeEarnerWithTaxFullyOffsetAndNearTheCap()
     {
         val taxableIncome = 21_500.0
         val incomeTax = 627.0
@@ -132,7 +131,7 @@ class IncomeTaxOffsetTest {
     }
 
     @Test
-    fun low_income_earner_maximum_offset()
+    fun lowIncomeEarnerMaximumOffset()
     {
         val taxableIncome = 21_594.0
         val incomeTax = 645.0
@@ -140,7 +139,7 @@ class IncomeTaxOffsetTest {
     }
 
     @Test
-    fun low_income_earner_bracket_limit()
+    fun lowIncomeEarnerBracketLimit()
     {
         val taxableIncome = 37_000.0
         val incomeTax = 3_572.0
@@ -148,7 +147,7 @@ class IncomeTaxOffsetTest {
     }
 
     @Test
-    fun low_to_middle_income_earner_tax_offsets()
+    fun lowToMiddleIncomeEarnerTaxOffsets()
     {
         val taxableIncome = 37_100.0
         val incomeTax = 3_605.0
@@ -156,7 +155,7 @@ class IncomeTaxOffsetTest {
     }
 
     @Test
-    fun max_low_and_middle_income_earner_tax_offsets()
+    fun maxLowAndMiddleIncomeEarnerTaxOffsets()
     {
         val taxableIncome = 48_000.0
         val incomeTax = 7_147.0
@@ -164,7 +163,7 @@ class IncomeTaxOffsetTest {
     }
 
     @Test
-        fun max_low_income_earner_tax_offsets()
+        fun maxLowIncomeEarnerTaxOffsets()
     {
         val taxableIncome = 66_667.0
         val incomeTax = 13_214.0
@@ -172,7 +171,7 @@ class IncomeTaxOffsetTest {
     }
 
     @Test
-    fun begin_tapering_low_income_earner_tax_offsets()
+    fun beginTaperingLowIncomeEarnerTaxOffsets()
     {
         val taxableIncome = 66_667.0
         val incomeTax = 14_297.0
@@ -180,7 +179,7 @@ class IncomeTaxOffsetTest {
     }
 
     @Test
-    fun limit_of_middle_income_earner_tax_offset()
+    fun limitOfMiddleIncomeEarnerTaxOffset()
     {
         val taxableIncome = 90_000.0
         val incomeTax = 20_797.0
@@ -188,7 +187,7 @@ class IncomeTaxOffsetTest {
     }
 
     @Test
-    fun tapering_of_low_and_of_middle_income_earner_tax_offset()
+    fun taperingOfLowAndOfMiddleIncomeEarnerTaxOffset()
     {
         val taxableIncome = 100_000.0
         val incomeTax = 24_497.0
@@ -196,7 +195,7 @@ class IncomeTaxOffsetTest {
     }
 
     @Test
-    fun almost_full_tapering_of_all_tax_offsets()
+    fun almostFullTaperingOfAllTaxOffsets()
     {
         val taxableIncome = 120_000.0
         val incomeTax = 31_897.0
@@ -204,7 +203,7 @@ class IncomeTaxOffsetTest {
     }
 
     @Test
-    fun boundary_of_zero_tax_offsets()
+    fun boundaryOfZeroTaxOffsets()
     {
         val taxableIncome = 125_333.0
         val incomeTax = 33_870.00
@@ -212,7 +211,7 @@ class IncomeTaxOffsetTest {
     }
 
     @Test
-    fun above_boundary_of_zero_tax_offsets()
+    fun aboveBoundaryOfZeroTaxOffsets()
     {
         val taxableIncome = 130_000.0
         val incomeTax = 35_597.00
