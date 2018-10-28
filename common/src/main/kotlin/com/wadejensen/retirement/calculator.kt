@@ -1,10 +1,10 @@
 package com.wadejensen.retirement
 
-import com.wadejensen.retirement.employment.raiseSalary
+import com.wadejensen.retirement.employment.Employment
 import com.wadejensen.retirement.investment.investmentGains
-import com.wadejensen.retirement.superannuation.concessionalSuperContributionTax
-import com.wadejensen.retirement.superannuation.superReturns
-import com.wadejensen.retirement.tax.*
+import com.wadejensen.retirement.superannuation.Super
+import com.wadejensen.retirement.tax.IncomeTax
+import com.wadejensen.retirement.tax.Medicare
 
 data class YearAndSalary(val financialYear: Int, val salary: Double)
 
@@ -60,7 +60,7 @@ class RetirementCalculator(
     {
         return calculateNextLedgerRow(
             financialYear             = ledger.last().financialYear + 1,
-            salary                    = raiseSalary(ledger.last().salary, PAY_RISE_RATE, MAX_PAY),
+            salary                    = Employment.raiseSalary(ledger.last().salary, PAY_RISE_RATE, MAX_PAY),
             investmentPrinciple       = ledger.last().investmentPrinciple,
             superPrinciple            = ledger.last().superPrinciple,
             hasPrivateHealthInsurance = hasPrivateHealthInsurance)
@@ -77,14 +77,14 @@ class RetirementCalculator(
     {
 
         // SUPER
-        val compulsorySuperContribution = compulsorySuperContribution(salary, financialYear)
+        val compulsorySuperContribution = Super.compulsoryContribution(salary, financialYear)
         val additionalConcessionalSuperContribution: Double = 0.0 // TODO()
         val nonConcessionalSuperContribution: Double = 0.0 // TODO()
         val nonConcessionalSuperContributionTax: Double = 0.0 // TODO()
 
-        val superGains = superPrinciple + superReturns(superPrinciple, SUPERANNUATION_RETURN_RATE)
+        val superGains = superPrinciple + Super.annualReturn(superPrinciple, SUPERANNUATION_RETURN_RATE)
 
-        val concessionalSuperTax = concessionalSuperContributionTax(
+        val concessionalSuperTax = Super.concessionalContributionTax(
             superPrinciple,
             compulsorySuperContribution,
             additionalConcessionalSuperContribution)
@@ -105,10 +105,10 @@ class RetirementCalculator(
         val taxDeductions: Double = additionalConcessionalSuperContribution // + TODO()
         val deductions: Double = additionalConcessionalSuperContribution // + TODO()
         val capitalGains = 0.0
-        val taxableIncome = taxableIncome(salary, deductions, capitalGains)
-        val incomeTax = incomeTax(taxableIncome) // TODO get CGT out of it
-        val incomeTaxOffsets = incomeTaxOffsets(taxableIncome, incomeTax)
-        val medicare = medicare(taxableIncome, hasPrivateHealthInsurance)
+        val taxableIncome = IncomeTax.taxableIncome(salary, deductions, capitalGains)
+        val incomeTax = IncomeTax.incomeTax(taxableIncome) // TODO get CGT out of it
+        val incomeTaxOffsets = IncomeTax.taxOffsets(taxableIncome, incomeTax)
+        val medicare = Medicare.tax(taxableIncome, hasPrivateHealthInsurance)
 
         val takeHomePay = taxableIncome + incomeTaxOffsets - incomeTax - medicare
 

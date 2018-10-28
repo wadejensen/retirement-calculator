@@ -1,10 +1,5 @@
 package com.wadejensen.retirement
 
-import com.typesafe.config.ConfigFactory
-import io.github.config4k.*
-
-import com.wadejensen.retirement.tax.incomeTax
-
 fun main(args : Array<String>) {
     println("Hello, world!")
 
@@ -17,7 +12,7 @@ fun main(args : Array<String>) {
 //    // typesafe config supports not only HOCON but also JSON
 //    // HOCON(Human-Optimized Config Object Notation) is the JSON superset
 //    val config = ConfigFactory.parseResources("test.conf")
-//
+//p0oi
 //    // typesafe config + config4k
 //    val x = config.extract<Family>("family")
 //

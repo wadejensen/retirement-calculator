@@ -1,12 +1,16 @@
 package com.wadejensen.retirement.tax
 
-fun capitalGainsTax(capitalGain: Double): Double {
-    TODO()
+object CapitalGainsTax {
+    fun tax(capitalGain: Double): Double
+    {
+        TODO()
+    }
+
+    fun discount(capitalGain: Double, yearsHeld: Int) {
+        TODO()
+    }
 }
 
-fun capitalGainsTaxDiscount(capitalGain: Double, yearsHeld: Int) {
-    TODO()
-}
 
 // if annual income is greater than 250,000 then concessional super contributions are taxed at 30%
 
