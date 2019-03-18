@@ -1,7 +1,19 @@
 package com.wadejensen.retirement
 
 fun main(args : Array<String>) {
-    println("Hello, world!")
+  println("Hello, world!")
+
+  Calculator.calculate(
+    financialYear = 2020,
+    salary = 100_000.0,
+    salaryIncludesSuper = false,
+    capitalGains = 0.0,
+    capitalGainsDiscount = 0.0,
+    hasHealthInsurance = true,
+    deductions = 0.0
+  )
+
+}
 
 //    println(incomeTax(100.00))
 //
@@ -18,14 +30,14 @@ fun main(args : Array<String>) {
 //
 //    println(x)
 
-    RetirementCalculator().calculateLedger(
-        initialFinancialYear = 2018,
-        initialSalary = 120_000.0,
-        finalFinancialYear = 2060,
-        retirementYear = 2040,
-        hasPrivateHealthInsurance = false,
-        stockMarketReturn = 0.075,
-        payRiseRate = 0.05,
-        inflation = 0.03,
-        maxPay = 154_000.0)
-}
+//    RetirementCalculator().calculateLedger(
+//        initialFinancialYear = 2018,
+//        initialSalary = 120_000.0,
+//        finalFinancialYear = 2060,
+//        retirementYear = 2040,
+//        hasHealthInsurance = false,
+//        stockMarketReturn = 0.075,
+//        payRiseRate = 0.05,
+//        inflation = 0.03,
+//        maxPay = 154_000.0)
+

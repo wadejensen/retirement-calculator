@@ -1,8 +1,8 @@
 package com.wadejensen.retirement
 
-import com.wadejensen.example.IConsole
-import com.wadejensen.example.IMath
-import com.wadejensen.example.SharedClass
+import com.wadejensen.xplat.IConsole
+import com.wadejensen.xplat.IMath
+import com.wadejensen.xplat.SharedClass
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

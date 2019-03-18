@@ -1,28 +1,31 @@
 package com.wadejensen.retirement
 
 import kotlin.test.Test
-import kotlin.test.assertTrue
+import kotlin.test.assertEquals
 
-class CalculatorTest {
-    @Test
-    fun ensure_salary_is_capped_at_max() {
-        val maxPay = 154_000.0
+class CalculatorTest
+{
+  @Test
+  fun testNormaliseSalary_WhenInclusiveOfSuper()
+  {
+    val normalisedSalary = Calculator.normaliseSalary(
+      salary = 99_000.0,
+      salaryIncludesSuper = true,
+      financialYear = 2020
+    )
 
-        val ledger = RetirementCalculator().calculateLedger(
-            initialFinancialYear = 2018,
-            initialSalary = 120_000.0,
-            finalFinancialYear = 2060,
-            retirementYear = 2040,
-            hasPrivateHealthInsurance = false,
-            stockMarketReturn = 0.075,
-            payRiseRate = 0.05,
-            inflation = 0.03,
-            maxPay = maxPay)
+    assertEquals(90_000.0, normalisedSalary)
+  }
 
-        val actualMaxPay = ledger
-            .map { row -> row.salary }
-            .max()!!
+  @Test
+  fun testNormaliseSalary_WhenExclusiveOfSuper()
+  {
+    val normalisedSalary = Calculator.normaliseSalary(
+      salary = 99_000.0,
+      salaryIncludesSuper = true,
+      financialYear = 2020
+    )
 
-        assertTrue(actualMaxPay <= maxPay)
-    }
+    assertEquals(99_000.0, normalisedSalary)
+  }
 }

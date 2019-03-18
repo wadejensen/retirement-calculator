@@ -1,18 +1,28 @@
 package com.wadejensen.retirement.employment
 
-import com.wadejensen.retirement.superannuation.Super
-import kotlin.math.min
+import com.wadejensen.retirement.Super
 
-object Employment {
-    fun salaryExcludingSuper(financialYear: Int, salaryIncludesSuper: Boolean, salary: Double) =
-        if (salaryIncludesSuper)
-            salary / (1 + Super.compsulsoryContributionRate(financialYear))
-        else
-            salary
 
-    fun payRise(salary: Double, payRiseRate: Double): Double =
-        salary * payRiseRate
-
-    fun raiseSalary(salary: Double, payRiseRate: Double, maxPay: Double) =
-        min(salary + payRise(salary, payRiseRate), maxPay)
+object Employment
+{
+  fun salaryAfterCompulsorySuper(
+      salary: Double,
+      salaryIncludesSuper: Boolean,
+      financialYear: Int
+  ): Double {
+    return if (salaryIncludesSuper) {
+      salary / (1 + Super.compsulsoryContributionRate(financialYear))
+    }
+    else {
+      salary
+    }
+  }
 }
+
+//object Employment {
+//  fun payRise(salary: Double, payRiseRate: Double): Double =
+//    salary * payRiseRate
+//
+//  fun raiseSalary(salary: Double, payRiseRate: Double, maxPay: Double) =
+//    min(salary + payRise(salary, payRiseRate), maxPay)
+//}

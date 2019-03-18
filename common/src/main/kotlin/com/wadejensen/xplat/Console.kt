@@ -1,4 +1,4 @@
-package com.wadejensen.example
+package com.wadejensen.xplat
 
 // The `expect` keyword declares that the common platform module expects that at compile time their exists a
 // Console class which satisfies the interface IConsole for the specific target platform

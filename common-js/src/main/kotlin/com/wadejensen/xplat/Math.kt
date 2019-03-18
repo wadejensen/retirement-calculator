@@ -1,6 +1,4 @@
-package com.wadejensen.example
-
-import com.wadejensen.example.IMath
+package com.wadejensen.xplat
 
 // The `actual` keyword declares this is the implementation `expect`ed by the common platform module
 // which satisfies the interface IConsole for the js platform target

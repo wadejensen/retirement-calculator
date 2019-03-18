@@ -1,6 +1,6 @@
 package com.wadejensen.retirement
 
-import com.wadejensen.example.SharedClass
+import com.wadejensen.xplat.SharedClass
 import com.wadejensen.retirement.flatmates.model.AutocompleteInput
 import com.wadejensen.retirement.flatmates.model.MapMarkersRequestBody
 import com.wadejensen.retirement.flatmates.model.RoomType
@@ -170,7 +170,7 @@ fun atlasMarker(lat: Double, lon: Double, map: google.maps.Map, price: Int, fill
  * We start this function from button click
  */
 fun start(ev: Event) {
-    val shared = SharedClass(DOMConsole(), com.wadejensen.example.Math())
+    val shared = SharedClass(DOMConsole(), com.wadejensen.xplat.Math())
     shared.platform = "JavaScript Browser"
     shared.printMe()
     shared.printPrimes(100)

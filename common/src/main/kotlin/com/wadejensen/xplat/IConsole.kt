@@ -1,4 +1,4 @@
-package com.wadejensen.example
+package com.wadejensen.xplat
 
 interface IConsole {
     /**

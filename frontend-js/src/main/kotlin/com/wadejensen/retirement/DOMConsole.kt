@@ -1,6 +1,6 @@
 package com.wadejensen.retirement
 
-import com.wadejensen.example.IConsole
+import com.wadejensen.xplat.IConsole
 import kotlin.browser.document
 
 // The `actual` keyword declares this is the implementation `expect`ed by the common platform module

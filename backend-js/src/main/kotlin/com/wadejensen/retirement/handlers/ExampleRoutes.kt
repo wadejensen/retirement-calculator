@@ -1,7 +1,7 @@
 package com.wadejensen.retirement.handlers
 
 import com.wadejensen.retirement.model.Person
-import com.wadejensen.example.SharedClass
+import com.wadejensen.xplat.SharedClass
 import express.http.ExpressRequest
 import express.http.ExpressResponse
 import com.wadejensen.retirement.kotlinjs.http.Method

@@ -1,6 +1,4 @@
-package com.wadejensen.example
-
-import com.wadejensen.example.IMath
+package com.wadejensen.xplat
 
 actual class Math : IMath {
     actual override fun sqrt(x: Double): Double {

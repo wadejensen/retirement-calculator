@@ -1,6 +1,6 @@
 package com.wadejensen.retirement
 
-import com.wadejensen.example.SharedClass
+import com.wadejensen.xplat.SharedClass
 import com.wadejensen.retirement.flatmates.FlatmatesClient
 import com.wadejensen.retirement.flatmates.model.RoomType
 import com.wadejensen.retirement.flatmates.routes.autocompleteHandler
@@ -30,7 +30,7 @@ fun start() {
     val app = Application()
 
     // Show off that I can share code between client and server
-    val shared = SharedClass(com.wadejensen.example.Console(), com.wadejensen.example.Math())
+    val shared = SharedClass(com.wadejensen.xplat.Console(), com.wadejensen.xplat.Math())
     println(shared.givePrimes(2))
 
     async {

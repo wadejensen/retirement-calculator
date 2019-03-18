@@ -1,6 +1,4 @@
-package com.wadejensen.example
-
-import com.wadejensen.example.IConsole
+package com.wadejensen.xplat
 
 actual class Console : IConsole {
     actual override fun println(s: String): Unit = println(s)

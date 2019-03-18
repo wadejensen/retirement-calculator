@@ -1,6 +1,6 @@
 package com.wadejensen.retirement
 
-import com.wadejensen.example.SharedClass
+import com.wadejensen.xplat.SharedClass
 
 /**
  * main function for JavaScript
@@ -13,7 +13,7 @@ fun main(vararg args: String) {
  * We start this function from <button onClick="
  */
 fun start() {
-    val shared = SharedClass(com.wadejensen.example.Console(), com.wadejensen.example.Math())
+    val shared = SharedClass(com.wadejensen.xplat.Console(), com.wadejensen.xplat.Math())
     shared.platform = "JavaScript"
     shared.printMe()
     shared.printPrimes(1000)

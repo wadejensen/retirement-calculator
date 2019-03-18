@@ -1,4 +1,4 @@
-package com.wadejensen.example
+package com.wadejensen.xplat
 
 /**
  * Shared multiplatform code written in Kotlin
