@@ -314,13 +314,10 @@ class IncomeTaxTest {
   fun testIncomeTax_BaseIncomeTaxWithHealthInsurance()
   {
     val incomeTaxPayable = IncomeTax.incomeTax(
-      salary = 100_000.0,
-      capitalGains = 0.0,
-      capitalGainsDiscount = 0.0,
+      taxableIncome = 100_000.0,
       compulsorySuper = 10_000.0,
       superSalarySacrifice = 0.0,
-      hasHealthInsurance = true,
-      deductions = 0.0
+      hasHealthInsurance = true
     )
 
     val expected = IncomeTaxPayable(
@@ -340,13 +337,10 @@ class IncomeTaxTest {
   fun testIncomeTax_BaseIncomeTaxWithoutHealthInsurance()
   {
     val incomeTaxPayable = IncomeTax.incomeTax(
-      salary = 100_000.0,
-      capitalGains = 0.0,
-      capitalGainsDiscount = 0.0,
+      taxableIncome = 100_000.0,
       compulsorySuper = 10_000.0,
       superSalarySacrifice = 0.0,
-      hasHealthInsurance = false,
-      deductions = 0.0
+      hasHealthInsurance = false
     )
 
     val expected = IncomeTaxPayable(
@@ -363,99 +357,18 @@ class IncomeTaxTest {
   }
 
   @Test
-  fun testIncomeTax_WithCapitalGains()
-  {
-    val incomeTaxPayable = IncomeTax.incomeTax(
-      salary = 100_000.0,
-      capitalGains = 10_000.0,
-      capitalGainsDiscount = 0.0,
-      compulsorySuper = 10_000.0,
-      superSalarySacrifice = 0.0,
-      hasHealthInsurance = false,
-      deductions = 0.0
-    )
-
-    val expected = IncomeTaxPayable(
-      incomeTax = 24_497.00 + 0.37 * 10_000.0,
-      medicare = 0.02 * 120_000.0 + 0.0125 * 120_000.0,
-      taxOffset = 230.0
-    )
-
-    assertEquals(expected.incomeTax, incomeTaxPayable.incomeTax)
-    assertEquals(expected.medicare, incomeTaxPayable.medicare)
-    assertEquals(expected.taxOffset, incomeTaxPayable.taxOffset)
-
-    assertEquals(expected.total(), incomeTaxPayable.total())
-  }
-
-  @Test
-  fun testIncomeTax_WithDiscountedCapitalGains()
-  {
-    val incomeTaxPayable = IncomeTax.incomeTax(
-      salary = 100_000.0,
-      capitalGains = 10_000.0,
-      capitalGainsDiscount = 5000.0,
-      compulsorySuper = 10_000.0,
-      superSalarySacrifice = 0.0,
-      hasHealthInsurance = false,
-      deductions = 0.0
-    )
-
-    val expected = IncomeTaxPayable(
-      incomeTax = 24_497.00 + 0.37 * 5_000.0,
-      medicare = 0.02 * 115_000.0 + 0.0125 * 115_000.0,
-      taxOffset = 305.0
-    )
-
-    assertEquals(expected.incomeTax, incomeTaxPayable.incomeTax)
-    assertEquals(expected.medicare, incomeTaxPayable.medicare)
-    assertEquals(expected.taxOffset, incomeTaxPayable.taxOffset)
-
-    assertEquals(expected.total(), incomeTaxPayable.total())
-  }
-
-  @Test
   fun testIncomeTax_WithSalarySacrifice()
   {
     val incomeTaxPayable = IncomeTax.incomeTax(
-      salary = 100_000.0,
-      capitalGains = 0.0,
-      capitalGainsDiscount = 0.0,
+      taxableIncome = 90_000.0,
       compulsorySuper = 10_000.0,
       superSalarySacrifice = 10_000.0,
-      hasHealthInsurance = true,
-      deductions = 0.0
+      hasHealthInsurance = true
     )
 
     val expected = IncomeTaxPayable(
       incomeTax = 20_797.0,
       medicare = 0.02 * 110_000.0,
-      taxOffset = 530.0
-    )
-
-    assertEquals(expected.incomeTax, incomeTaxPayable.incomeTax)
-    assertEquals(expected.medicare, incomeTaxPayable.medicare)
-    assertEquals(expected.taxOffset, incomeTaxPayable.taxOffset)
-
-    assertEquals(expected.total(), incomeTaxPayable.total())
-  }
-
-  @Test
-  fun testIncomeTax_WithDeductions()
-  {
-    val incomeTaxPayable = IncomeTax.incomeTax(
-      salary = 100_000.0,
-      capitalGains = 0.0,
-      capitalGainsDiscount = 0.0,
-      compulsorySuper = 10_000.0,
-      superSalarySacrifice = 0.0,
-      hasHealthInsurance = true,
-      deductions = 10_000.0
-    )
-
-    val expected = IncomeTaxPayable(
-      incomeTax = 20_797.0,
-      medicare = 0.02 * 100_000.0,
       taxOffset = 530.0
     )
 

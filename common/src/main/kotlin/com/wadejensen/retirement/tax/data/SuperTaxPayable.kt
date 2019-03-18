@@ -1,6 +1,6 @@
 package com.wadejensen.retirement.tax.data
 
-data class SuperTax(
+data class SuperTaxPayable(
     val concessional: Double,
     val nonConcessional: Double,
     val division293: Double

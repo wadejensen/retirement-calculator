@@ -1,6 +1,6 @@
 package com.wadejensen.retirement
 
-import com.wadejensen.retirement.tax.data.SuperTax
+import com.wadejensen.retirement.tax.data.SuperTaxPayable
 import com.wadejensen.retirement.validation.ConcessionalCapExceededError
 import com.wadejensen.retirement.validation.SuperContributionCapExceededError
 import com.wadejensen.retirement.validation.ValidationWarning
@@ -52,7 +52,7 @@ object Super {
       afterTaxContribution: Double,
       taxableIncome: Double,
       warnings: MutableList<ValidationWarning>
-  ): SuperTax {
+  ): SuperTaxPayable {
 
     val beforeTaxContribution = compulsoryContribution + pretaxContribution
     val concessional: Double = concessionalContributionTax(
@@ -65,7 +65,7 @@ object Super {
     )
     val division293 = division293Tax(taxableIncome)
 
-    return SuperTax(concessional, nonConcessional, division293)
+    return SuperTaxPayable(concessional, nonConcessional, division293)
   }
 
   /**

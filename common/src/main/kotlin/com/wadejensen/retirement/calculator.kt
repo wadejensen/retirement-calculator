@@ -1,7 +1,8 @@
 package com.wadejensen.retirement
 
+import com.wadejensen.retirement.tax.data.IncomeTaxPayable
 import com.wadejensen.retirement.tax.data.SuperContribution
-import com.wadejensen.retirement.tax.data.SuperTax
+import com.wadejensen.retirement.tax.data.SuperTaxPayable
 import com.wadejensen.retirement.validation.ValidationWarning
 
 object Calculator {
@@ -58,7 +59,26 @@ object Calculator {
       warnings = warnings
     )
 
+//    val cash = salaryAfterCompulsorySuper + - superSalarySacrifice - afterTaxContribution
+
+
+
   }
+
+  data class Row(
+      val financialYear: Int,
+      val salary: Double,
+      val compulsorySuper: Double,
+      val superSalarySacrifice: Double,
+      val afterTaxSuperContribution: Double,
+      val capitalGains: Double,
+      val taxableIncome: Double,
+      val incomeTax: Double,
+      val superTax: Double,
+
+      val incomeTaxPayable: IncomeTaxPayable,
+      val superTaxPayable: SuperTaxPayable
+  )
 
 
 

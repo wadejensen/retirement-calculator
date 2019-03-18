@@ -3,7 +3,7 @@ package com.wadejensen.retirement
 import com.wadejensen.retirement.tax.data.IncomeTaxPayable
 import com.wadejensen.retirement.tax.data.Portfolio
 import com.wadejensen.retirement.tax.data.SuperContribution
-import com.wadejensen.retirement.tax.data.SuperTax
+import com.wadejensen.retirement.tax.data.SuperTaxPayable
 
 data class LedgerRow(
     val financialYear: Int,
@@ -11,7 +11,7 @@ data class LedgerRow(
     val taxableIncome: Double,
     val incomeTax: IncomeTaxPayable,
     val superContribution: SuperContribution,
-    val superTax: SuperTax,
+    val superTaxPayable: SuperTaxPayable,
     val takeHomePay: Double,
     val netSuperContribution: Double,
     val portfolio: Portfolio
@@ -23,7 +23,7 @@ data class LedgerRow(
       taxableIncome.toString(),
       incomeTax.toString(),
       superContribution.toString(),
-      superTax.toString(),
+      superTaxPayable.toString(),
       takeHomePay.toString(),
       netSuperContribution.toString(),
       portfolio.toString()
