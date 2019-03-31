@@ -37,31 +37,14 @@ buildscript {
 }
 
 ext {
-    nodeVersion = '8.11.4'
-    qunitVersion = '2.6.2'
     coroutinesVersion = "0.24.0"
-    kotlinxHtmlJsVersion = '0.6.11'
-    kotlinReactVersion = "16.5.0-pre.52-kotlin--$kotlinVersion"
-    kotlinReactDomVersion = "16.5.0-pre.52-kotlin-$kotlinVersion"
 
     libraries = [
         junit: "junit:junit:4.12",
         kotlin_stdlib: "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
-        kotlin_stdlib_common: "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion",
-        kotlin_stdlib_js: "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion",
-        kotlin_test_annotations_common: "org.jetbrains.kotlin:kotlin-test-annotations-common:$kotlinVersion",
-        kotlin_test_common: "org.jetbrains.kotlin:kotlin-test-common:$kotlinVersion",
-        kotlin_test_js: "org.jetbrains.kotlin:kotlin-test-js:$kotlinVersion",
         kotlin_test_junit: "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion",
         kotlin_serialization: "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version",
-        kotlin_serialization_common: "org.jetbrains.kotlinx-serialization-runtime-common:$serialization_version",
-        kotlin_serialization_js: "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version",
         kotlin_coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion",
-        kotlin_coroutines_common: "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion",
-        kotlin_coroutines_js: "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutinesVersion",
-        kotlinx_html_js: "org.jetbrains.kotlinx:kotlinx-html-js:$kotlinxHtmlJsVersion",
-        kotlin_react: "org.jetbrains:kotlin-react:$kotlinReactVersion",
-        kotlin_react_dom: "org.jetbrains:kotlin-react-dom:$kotlinReactDomVersion",
     ]
 }
 

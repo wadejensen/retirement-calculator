@@ -1,7 +1,0 @@
-apply plugin: 'kotlin-platform-jvm'
-
-dependencies {
-    compile project(':common')
-    compile libraries.kotlin_stdlib
-    testCompile libraries.kotlin_test_junit
-}

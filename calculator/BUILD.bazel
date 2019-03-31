@@ -1,0 +1,37 @@
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl",
+    "kt_jvm_library",
+    "kt_jvm_binary",
+    "kt_jvm_test",
+)
+
+kt_jvm_library(
+    name = "calculator_lib",
+    srcs = glob(["src/main/**/*.kt"]),
+)
+
+kt_jvm_library(
+    name = "test_lib",
+    srcs = glob(["src/test/**/*.kt"]),
+    deps = [
+        ":calculator_lib",
+        "//third_party/jvm/junit:junit",
+    ]
+)
+
+java_binary(
+    name = "calculator",
+    main_class = "com.wadejensen.retirement.Main.kt",
+    visibility = ["//visibility:public"],
+    runtime_deps = [":calculator_lib"],
+)
+
+kt_jvm_test(
+    name = "unit_test",
+    srcs = glob(["src/test/kotlin/com/wadejensen/retirement/tax/IncomeTaxTest.kt"]),
+    visibility = ["//visibility:public"],
+    deps = [
+        ":calculator_lib",
+        ":test_lib",
+        "//third_party/jvm/junit:junit",
+    ],
+)
