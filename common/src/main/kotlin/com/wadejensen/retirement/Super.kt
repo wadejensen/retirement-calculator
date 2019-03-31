@@ -1,7 +1,7 @@
 package com.wadejensen.retirement
 
 import com.wadejensen.retirement.tax.data.SuperTaxPayable
-import com.wadejensen.retirement.validation.ConcessionalCapExceededError
+import com.wadejensen.retirement.validation.ConcessionalCapExceededWarning
 import com.wadejensen.retirement.validation.SuperContributionCapExceededError
 import com.wadejensen.retirement.validation.ValidationWarning
 
@@ -80,7 +80,7 @@ object Super {
         beforeTaxContribution * TAX_RATE
       }
       else {
-        val warning = ConcessionalCapExceededError(
+        val warning = ConcessionalCapExceededWarning(
           message = """
         Concessional super cap has been exceeded.
         Some of your contribution will be taxed at the maximum income tax rate.
