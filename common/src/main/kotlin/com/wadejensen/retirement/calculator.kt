@@ -48,7 +48,8 @@ object Calculator {
       taxableIncome = taxableIncome,
       compulsorySuper = compulsorySuper,
       superSalarySacrifice = superSalarySacrifice,
-      hasHealthInsurance = hasHealthInsurance
+      hasHealthInsurance = hasHealthInsurance,
+      warnings = warnings
     )
 
     val superTax = Super.contributionTax(

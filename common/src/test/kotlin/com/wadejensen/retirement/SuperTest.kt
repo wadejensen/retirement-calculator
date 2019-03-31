@@ -1,6 +1,6 @@
 package com.wadejensen.retirement
 
-import com.wadejensen.retirement.validation.ConcessionalCapExceededError
+import com.wadejensen.retirement.validation.ConcessionalCapExceededWarning
 import com.wadejensen.retirement.validation.SuperContributionCapExceededError
 import com.wadejensen.retirement.validation.ValidationWarning
 import kotlin.test.Test
@@ -72,8 +72,8 @@ class SuperTest
       actual = concessionalContributionTax
     )
     assertEquals(expected = 1, actual = validationWarnings.size)
-    assertTrue(validationWarnings[0] is ConcessionalCapExceededError)
-    val warning = validationWarnings[0] as ConcessionalCapExceededError
+    assertTrue(validationWarnings[0] is ConcessionalCapExceededWarning)
+    val warning = validationWarnings[0] as ConcessionalCapExceededWarning
 
     assertEquals(expected = 35_000.0, actual = warning.contributionAmount)
     assertEquals(expected = 25_000.0, actual = warning.concessionalCap)

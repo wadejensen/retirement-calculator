@@ -249,7 +249,9 @@ class IncomeTaxTest {
   fun testMedicare_WithIncomeBelowSurchargeThreshold()
   {
     val medicareLevy = IncomeTax.medicare(
-      income = 89_000.0, hasHealthInsurance = false
+      income = 89_000.0,
+      hasHealthInsurance = false,
+      warnings = mutableListOf()
     )
     assertEquals(0.02 * 89_000.0, medicareLevy)
   }
@@ -258,7 +260,9 @@ class IncomeTaxTest {
   fun testMedicare_WithIncomeAboveLowestSurchargeThresholdAndNoInsurance()
   {
     val medicareLevy = IncomeTax.medicare(
-      income = 91_000.0, hasHealthInsurance = false
+      income = 91_000.0,
+      hasHealthInsurance = false,
+      warnings = mutableListOf()
     )
     assertEquals(0.02 * 91_000.0 + 0.01 * 91_000.0, medicareLevy)
   }
@@ -317,7 +321,8 @@ class IncomeTaxTest {
       taxableIncome = 100_000.0,
       compulsorySuper = 10_000.0,
       superSalarySacrifice = 0.0,
-      hasHealthInsurance = true
+      hasHealthInsurance = true,
+      warnings = mutableListOf()
     )
 
     val expected = IncomeTaxPayable(
@@ -340,7 +345,8 @@ class IncomeTaxTest {
       taxableIncome = 100_000.0,
       compulsorySuper = 10_000.0,
       superSalarySacrifice = 0.0,
-      hasHealthInsurance = false
+      hasHealthInsurance = false,
+      warnings = mutableListOf()
     )
 
     val expected = IncomeTaxPayable(
@@ -363,7 +369,8 @@ class IncomeTaxTest {
       taxableIncome = 90_000.0,
       compulsorySuper = 10_000.0,
       superSalarySacrifice = 10_000.0,
-      hasHealthInsurance = true
+      hasHealthInsurance = true,
+      warnings = mutableListOf()
     )
 
     val expected = IncomeTaxPayable(

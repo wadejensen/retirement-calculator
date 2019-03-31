@@ -4,6 +4,8 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
 import com.wadejensen.retirement.tax.data.IncomeTaxPayable
+import com.wadejensen.retirement.validation.MedicareLevyWarning
+import com.wadejensen.retirement.validation.ValidationWarning
 
 /**
  * Calculates the income tax owed
@@ -11,21 +13,19 @@ import com.wadejensen.retirement.tax.data.IncomeTaxPayable
  */
 object IncomeTax {
 
-  val TAX_FREE_THRESHOLD = 18_200.0
-  val LOW_INCOME_THRESHOLD = 37_000.0
-  val MIDDLE_INCOME_THRESHOLD = 90_000.0
-  val HIGH_INCOME_THRESHOLD = 180_000.0
+  private val TAX_FREE_THRESHOLD = 18_200.0
+  private val LOW_INCOME_THRESHOLD = 37_000.0
+  private val MIDDLE_INCOME_THRESHOLD = 90_000.0
+  private val HIGH_INCOME_THRESHOLD = 180_000.0
 
-  val MEDICARE_LEVY_RATE = 0.02
+  private val MEDICARE_LEVY_RATE = 0.02
 
-
-  /**
-   */
   fun incomeTax(
       taxableIncome: Double,
       compulsorySuper: Double,
       superSalarySacrifice: Double,
-      hasHealthInsurance: Boolean
+      hasHealthInsurance: Boolean,
+      warnings: MutableList<ValidationWarning>
   ): IncomeTaxPayable {
     // income for medicare surcharge purposes
     val medicareIncome = medicareIncome(
@@ -34,7 +34,7 @@ object IncomeTax {
     )
 
     val incomeTax = baseIncomeTax(taxableIncome)
-    val medicare = medicare(medicareIncome, hasHealthInsurance)
+    val medicare = medicare(medicareIncome, hasHealthInsurance, warnings)
     val taxOffset = taxOffsets(taxableIncome, incomeTax)
 
     return IncomeTaxPayable(incomeTax, medicare, taxOffset)
@@ -94,9 +94,22 @@ object IncomeTax {
    * @param income Income for medicare levy surcharge purposes
    * @param hasHealthInsurance True if user has private hospital cover
    */
-  fun medicare(income: Double, hasHealthInsurance: Boolean): Double
-  {
+  fun medicare(
+      income: Double, hasHealthInsurance: Boolean,
+      warnings: MutableList<ValidationWarning>
+  ): Double {
     val surchargeRate = levySurchargeRate(income, hasHealthInsurance)
+
+    if (surchargeRate != 0.0) {
+      warnings.add(
+        MedicareLevyWarning(
+           message = """Medicare levy surcharge applied since middle taxable
+             income bracket exceeded and no private hospital cover.""",
+           surchargeRate = surchargeRate,
+           surchargeIncomeThreshold = MIDDLE_INCOME_THRESHOLD
+        )
+      )
+    }
     return income * (MEDICARE_LEVY_RATE + surchargeRate)
   }
 
@@ -111,8 +124,8 @@ object IncomeTax {
       hasHealthInsurance: Boolean
   ): Double {
     return when {
-        hasHealthInsurance || income <= 90_000.0 -> 0.0
-        income > 90_000.0 && income <= 105_000.0 -> 0.01
+        hasHealthInsurance || income <= MIDDLE_INCOME_THRESHOLD -> 0.0
+        income > MIDDLE_INCOME_THRESHOLD && income <= 105_000.0 -> 0.01
         income > 105_000.0 && income <= 140_000.0 -> 0.0125
         else -> 0.035
     }
